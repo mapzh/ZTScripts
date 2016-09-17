@@ -12,7 +12,7 @@ case $opt in
     green)
     tocolor="\033[32m";
     ;;
-    yellow)
+     )
     tocolor="\033[33m";
     ;;
     blue)
