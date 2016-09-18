@@ -53,7 +53,9 @@ update_master_branch()
         tag=git pull origin master
         ${this_dir_path}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【更新完成】-----------------" -o
     else
-        read -p "输入yes,回车后自动提交;否则退出更新,手动commit" need_update
+        ${this_dir_path}/output_conf.sh -F red
+        read -p "输入yes,回车后自动提交;否则退出更新,手动commit:" need_update
+        ${this_dir_path}/output_conf.sh -o
         if [[ $need_update == "yes" ]]; then
             git add -A
             git commit -am 'auto commit'
