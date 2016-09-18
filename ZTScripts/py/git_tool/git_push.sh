@@ -33,6 +33,7 @@ push_master_branch()
     ${this_dir_path}/output_conf.sh -F green -t "-------------------- 上传`basename "$TARGET_DIR"` --------------------" -o
 
     git status > ${TEMP_FILE}
+
     enable_push=1
     has_new_file=0
     while read txtLine
@@ -50,6 +51,8 @@ push_master_branch()
             break
         fi
     done  < ${TEMP_FILE}
+
+    rm ${TEMP_FILE}
 
     if [[ ${enable_push} -eq 1 ]]; then
         git pull origin master
@@ -85,5 +88,3 @@ if [[ `is_master_branch` -eq 0 ]]; then
 else
     ${this_dir_path}/output_conf.sh -F red -t "-------------- `basename "$TARGET_DIR"`【不在master分支】--------------" -o
 fi
-
-rm ${TEMP_FILE}
