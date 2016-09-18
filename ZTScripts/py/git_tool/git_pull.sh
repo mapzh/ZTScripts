@@ -68,7 +68,7 @@ update_master_branch()
             fi
             git commit -am 'auto commit'
             git pull origin master
-
+            ${this_dir_path}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【更新完成】-----------------" -o
         else
             ${this_dir_path}/output_conf.sh -F red -t "--------------- `basename "$TARGET_DIR"`【有修改未提交】----------------" -o
         fi
