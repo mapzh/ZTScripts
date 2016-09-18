@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # author:mapengzhen
 
+export this_dir_path=$(cd "$(dirname "$0")"; pwd)
+export this_file_name=`basename $0`
+
 #用于保存屏幕输出
 export TEMP_FILE="pull_output.txt"
 
@@ -11,45 +14,47 @@ export TARGET_DIR=$1
 #@return 0:是 1:不是
 is_master_branch()
 {
-git branch | grep "master" > ${TEMP_FILE}
+    git branch | grep "master" > ${TEMP_FILE}
 
-if [[ `ls -l ${TEMP_FILE} | awk '{print $5}'` -gt 0 ]]; then
-    if [[ `cat ${TEMP_FILE}` == "* master" ]]; then
-        echo 0
+    if [[ `ls -l ${TEMP_FILE} | awk '{print $5}'` -gt 0 ]]; then
+        if [[ `cat ${TEMP_FILE}` == "* master" ]]; then
+            echo 0
+        else
+            echo 1
+        fi
     else
         echo 1
     fi
-else
-echo 1
-fi
 }
 
 #@return 0:更新完成 1:更新失败
 update_master_branch()
 {
-./output_conf.sh -F green  -t "..............更新`basename "$TARGET_DIR"`.............."
+    ${this_dir_path}/output_conf.sh -F green -t "-------------------- 更新`basename "$TARGET_DIR"` " -o
 
-git status > ${TEMP_FILE}
+    git status > ${TEMP_FILE}
 
-enable_update=0
+    enable_update=0
 
-while read txtLine
-do
-count1=`echo ${txtLine} | grep 'new file:' | wc -l`
-count2=`echo ${txtLine} | grep 'modified:' | wc -l`
-count3=`echo ${txtLine} | grep 'deleted:' | wc -l`
+    while read txtLine
+    do
+        count1=`echo ${txtLine} | grep 'new file:' | wc -l`
+        count2=`echo ${txtLine} | grep 'modified:' | wc -l`
+        count3=`echo ${txtLine} | grep 'deleted:' | wc -l`
 
-if [[ ${count1} -gt 0 || ${count2} -gt 0 || ${count3} -gt 0 ]] ; then
-    enable_update=1
-    break
-fi
-done  < ${TEMP_FILE}
+        if [[ ${count1} -gt 0 || ${count2} -gt 0 || ${count3} -gt 0 ]] ;
+        then
+            enable_update=1
+            break
+        fi
+    done  < ${TEMP_FILE}
 
-if [[ ${enable_update} -eq 0 ]]; then
-    git pull origin master
-else
-    ./output_conf.sh -F red -t "-------------`basename "$TARGET_DIR"`【有修改未提交】-------------"
-fi
+    if [[ ${enable_update} -eq 0 ]]; then
+        git pull origin master
+        ${this_dir_path}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【更新完成】-----------------" -o
+    else
+        ${this_dir_path}/output_conf.sh -F red -t "--------------- `basename "$TARGET_DIR"`【有修改未提交】----------------" -o
+    fi
 
 }
 
@@ -59,7 +64,7 @@ cd  ${TARGET_DIR}
 if [[ `is_master_branch` -eq 0 ]]; then
     update_master_branch
 else
-    ./output_conf.sh -F red -t "-------------`basename "$TARGET_DIR"`【不在master分支】-------------"
+    ${this_dir_path}/output_conf.sh -F red -t "-------------- `basename "$TARGET_DIR"`【不在master分支】--------------" -o
 fi
 
 rm ${TEMP_FILE}
