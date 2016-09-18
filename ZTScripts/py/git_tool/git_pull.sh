@@ -35,13 +35,17 @@ update_master_branch()
     git status > ${TEMP_FILE}
 
     enable_update=0
-
+    has_new_file=0
     while read txtLine
     do
         count1=`echo ${txtLine} | grep 'new file:' | wc -l`
         count2=`echo ${txtLine} | grep 'modified:' | wc -l`
         count3=`echo ${txtLine} | grep 'deleted:' | wc -l`
-
+        
+        if [[ ${count1} -gt 0 ]]; then
+            has_new_file=1
+        fi
+        
         if [[ ${count1} -gt 0 || ${count2} -gt 0 || ${count3} -gt 0 ]] ;
         then
             enable_update=1
@@ -50,17 +54,21 @@ update_master_branch()
     done  < ${TEMP_FILE}
 
     if [[ ${enable_update} -eq 0 ]]; then
-        tag=git pull origin master
+        git pull origin master
         ${this_dir_path}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【更新完成】-----------------" -o
     else
-
         ${this_dir_path}/output_conf.sh -F red
         git status
+        ${this_dir_path}/output_conf.sh -F purple
         read -p "以上红色部分是未提交记录,输入yes,回车后自动提交;否则退出更新,手动commit（建议手动提交）:" need_update
         ${this_dir_path}/output_conf.sh -o
         if [[ $need_update == "yes" ]]; then
-            git add -A
+            if [[ ${has_new_file} -gt 0 ]]; then
+                git add -A
+            fi
             git commit -am 'auto commit'
+            git pull origin master
+
         else
             ${this_dir_path}/output_conf.sh -F red -t "--------------- `basename "$TARGET_DIR"`【有修改未提交】----------------" -o
         fi
