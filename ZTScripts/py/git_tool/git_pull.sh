@@ -30,7 +30,7 @@ is_master_branch()
 #@return 0:更新完成 1:更新失败
 update_master_branch()
 {
-    ${this_dir_path}/output_conf.sh -F green -t "-------------------- 更新`basename "$TARGET_DIR"` " -o
+    ${this_dir_path}/output_conf.sh -F green -t "-------------------- 更新`basename "$TARGET_DIR"` --------------------" -o
 
     git status > ${TEMP_FILE}
 
@@ -50,7 +50,8 @@ update_master_branch()
     done  < ${TEMP_FILE}
 
     if [[ ${enable_update} -eq 0 ]]; then
-        git pull origin master
+        tag=git pull origin master
+        echo "tag==${tag}"
         ${this_dir_path}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【更新完成】-----------------" -o
     else
         ${this_dir_path}/output_conf.sh -F red -t "--------------- `basename "$TARGET_DIR"`【有修改未提交】----------------" -o
