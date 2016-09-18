@@ -113,8 +113,6 @@ bg_color(){
 }
 
 
-export opt=$1
-
 while getopts :F:B:obct: ARGS
     do
         case $ARGS in
