@@ -51,10 +51,15 @@ update_master_branch()
 
     if [[ ${enable_update} -eq 0 ]]; then
         tag=git pull origin master
-        echo "tag==${tag}"
         ${this_dir_path}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【更新完成】-----------------" -o
     else
-        ${this_dir_path}/output_conf.sh -F red -t "--------------- `basename "$TARGET_DIR"`【有修改未提交】----------------" -o
+        read -p "输入yes,回车后自动提交;否则退出更新,手动commit" need_update
+        if [[ $need_update == "yes" ]]; then
+            git add -A
+            git commit -am 'auto commit'
+        else
+            ${this_dir_path}/output_conf.sh -F red -t "--------------- `basename "$TARGET_DIR"`【有修改未提交】----------------" -o
+        fi
     fi
 
 }
