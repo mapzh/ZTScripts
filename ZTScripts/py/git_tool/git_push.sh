@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # author:mapengzhen
 
-export this_dir_path=$(cd "$(dirname "$0")"; pwd)
-export this_file_name=`basename $0`
+export THIS_DIR_PATH=$(cd "$(dirname "$0")"; pwd)
+export THIS_FILE_NAME=`basename $0`
 
 #用于保存屏幕输出
 export TEMP_FILE="push_output.txt"
@@ -30,7 +30,7 @@ is_master_branch()
 #@return 0:更新完成 1:更新失败
 push_master_branch()
 {
-    ${this_dir_path}/output_conf.sh -F green -t "-------------------- 上传`basename "$TARGET_DIR"` --------------------" -o
+    ${THIS_DIR_PATH}/output_conf.sh -F green -t "-------------------- 上传`basename "$TARGET_DIR"` --------------------" -o
 
     git status > ${TEMP_FILE}
 
@@ -59,11 +59,11 @@ push_master_branch()
         git push origin master
     else
 
-        ${this_dir_path}/output_conf.sh -F red
+        ${THIS_DIR_PATH}/output_conf.sh -F red
         git status
-        ${this_dir_path}/output_conf.sh -F purple
+        ${THIS_DIR_PATH}/output_conf.sh -F purple
         read -p "以上红色部分是未提交记录,输入yes,回车后自动提交;否则退出更新,手动commit（建议手动提交）:" need_update
-        ${this_dir_path}/output_conf.sh -o
+        ${THIS_DIR_PATH}/output_conf.sh -o
         if [[ $need_update == "yes" ]]; then
             if [[ ${has_new_file} -gt 0 ]]; then
                 git add -A
@@ -71,9 +71,9 @@ push_master_branch()
             git commit -am 'auto commit'
             git pull origin master
             git push origin master
-            ${this_dir_path}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【上传完成】-----------------" -o
+            ${THIS_DIR_PATH}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【上传完成】-----------------" -o
         else
-            ${this_dir_path}/output_conf.sh -F red -t "----------------- `basename "$TARGET_DIR"`【上传失败】-----------------" -o
+            ${THIS_DIR_PATH}/output_conf.sh -F red -t "----------------- `basename "$TARGET_DIR"`【上传失败】-----------------" -o
         fi
 
     fi
@@ -86,5 +86,5 @@ cd  ${TARGET_DIR}
 if [[ `is_master_branch` -eq 0 ]]; then
     push_master_branch
 else
-    ${this_dir_path}/output_conf.sh -F red -t "-------------- `basename "$TARGET_DIR"`【不在master分支】--------------" -o
+    ${THIS_DIR_PATH}/output_conf.sh -F red -t "-------------- `basename "$TARGET_DIR"`【不在master分支】--------------" -o
 fi
