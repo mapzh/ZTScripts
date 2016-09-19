@@ -21,10 +21,19 @@ find_tag_version(){
 change_revision_version(){
     file=$1
     version=`find_tag_version ${file}`
-    last=`echo ${version} | awk -F"[.]" '{print $3}'`
-    declare -i new_last=$last+1
-    new_version=`echo ${version} | tr '3' ${new_last}`
-    echo $new_version
+    new_version=`echo ${version} | awk -F"[.]" '
+        BEGIN{
+
+
+        }
+        {
+            printf("%s.%s.%d",$1,$2,$3+1);
+        }
+        END{
+
+        }
+    '`
+    cat $file | sed -i "s/"${version}"/"${new_version}"/g" *
 }
 
 change_minor_version(){
