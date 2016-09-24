@@ -8,6 +8,6 @@ export TARGET_DIR=$1
 
 
 cd ${TARGET_DIR}
-${THIS_DIR_PATH}/output_conf.sh -F green -t "------------------- clone `basename "$TARGET_DIR"` -------------------" -o
+${THIS_DIR_PATH}/output_conf.sh -F green -t "-------------------  cloning -------------------" -o
 git clone --depth=1 $2
-${THIS_DIR_PATH}/output_conf.sh -F green -t "----------------- `basename "$TARGET_DIR"`【clone完成】-----------------" -o
+${THIS_DIR_PATH}/output_conf.sh -F green -t "-----------------【clone完成】-----------------" -o

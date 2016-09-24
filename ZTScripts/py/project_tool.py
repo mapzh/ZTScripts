@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+__author__ = 'mapengzhen'
+
 from podspec_tool import podspec
 import sys
 import shutil
@@ -18,7 +20,7 @@ def get_parent_dir_path(path):
 #当前文件目录
 THIS_FILE_PATH = os.path.abspath(__file__)
 #父文件目录
-THIS_DIR_PATH = os.path.split(THIS_FILE_PATH)[0]
+THIS_DIR_PATH = os.path.dirname(THIS_FILE_PATH)
 #脚本所在目录
 SCRIPT_PATH = get_parent_dir_path(THIS_DIR_PATH)
 #SCRIPT项目所在目录
@@ -36,10 +38,10 @@ def main():
     usage = '''
     Example:
         Most common use case:
-        > %prog -c BiscuitCore -v.If you want to clone all projects,you can use %prog -c All
-        > %prog -l BiscuitCore -v
-        > %prog -s BiscuitCore -v
-        > %prog -t BiscuitCore -v
+        > %prog -c BiscuitCore
+        > %prog -l BiscuitCore
+        > %prog -s BiscuitCore
+        > %prog -t BiscuitCore
     '''
     parser = OptionParser(usage=usage)
     parser.add_option("-v", "--verbose",
