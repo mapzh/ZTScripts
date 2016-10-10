@@ -3,8 +3,19 @@
 
 __author__ = 'mapengzhen'
 
-from podspec_tool import podspec
+'''
+版本号(GUN风格):
+主版本号.子版本号[.修正版本号[.编译版本号]]
+
+Major_Version_Number.Minor_Version_Number[.Revision_Number[.Build_Number]]
+
+示例：1.2.1 、 2.0 、 5.0.0 build-13124
+
+'''
+
+from podspec import podspec
 import sys
+import os
 import shutil
 import logging
 from optparse import OptionParser
@@ -28,48 +39,46 @@ SCRIPT_PROJECT_PATH = get_parent_dir_path(SCRIPT_PATH)
 #主项目所在目录
 MAIN_PROJECT_PATH = get_parent_dir_path(SCRIPT_PROJECT_PATH)
 
-def give_x_permission():
-    permission_cmd = 'chmod +x %s/%s' % (THIS_DIR_PATH, "*.sh")
-    status = os.system(permission_cmd)
+
+
+def change_minor_version():
+    print "change_minor_version"
+
+def change_major_version():
+    print "change_major_version"
+
+def change_revision_version():
+    print "change_revision_version"
 
 
 def main():
-    give_x_permission()
     usage = '''
     Example:
         Most common use case:
-        > %prog -c BiscuitCore
-        > %prog -l BiscuitCore
-        > %prog -s BiscuitCore
-        > %prog -t BiscuitCore
+        > %prog -v
+        > %prog -m model_name
+        > %prog -M model_name
+        > %prog -r model_name
     '''
     parser = OptionParser(usage=usage)
     parser.add_option("-v", "--verbose",
                       dest="verbose",
                       help="log",
                       action="store_true")
-    parser.add_option("-c", "--clone",
-                      dest="clone",
-                      help="clone main project and dependencies",
+    parser.add_option("-m", "--minor",
+                      dest="change_minor_version",
+                      help="修改子版本号",
                       action="append")
-    parser.add_option("-l", "--pull",
-                      dest="pull",
-                      help="git pull",
+    parser.add_option("-M", "--major",
+                      dest="change_major_version",
+                      help="修改主版本号",
                       action="append")
-    parser.add_option("-s", "--push",
-                      dest="push",
-                      help="git push",
-                      action="append")
-    parser.add_option("-t", "--tag",
-                      dest="make_tag",
-                      help="git tag",
+    parser.add_option("-r", "--revision",
+                      dest="change_revision_version",
+                      help="修改修正版本号",
                       action="append")
 
     (options, args) = parser.parse_args()
-
-
-    # if options.clone is not None:
-    #     clone(options.clone)
 
 
 if __name__ == "__main__":
